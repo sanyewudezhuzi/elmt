@@ -7,12 +7,15 @@ import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
+import com.sky.dto.EmployeeEditPasswordDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
+import com.sky.handler.GlobalExceptionHandler;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
 import com.sky.service.EmployeeService;
@@ -147,6 +150,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         BeanUtils.copyProperties(employeeDTO, employee);
         employee.setUpdateUser(BaseContext.getCurrentId());
         employee.setUpdateTime(LocalDateTime.now());
+        employeeMapper.update(employee);
+    }
+
+    /**
+     * 修改密码
+     *
+     * @param employeeEditPasswordDTO
+     */
+    @Override
+    public void editPassword(EmployeeEditPasswordDTO employeeEditPasswordDTO) {
+        Employee employee = employeeMapper.getById(BaseContext.getCurrentId());
+        String oldPassword = DigestUtils.md5DigestAsHex(employeeEditPasswordDTO.getOldPassword().getBytes());
+        if (!employee.getPassword().equals(oldPassword)) {
+            throw new PasswordEditFailedException(MessageConstant.PASSWORD_ERROR);
+        }
+        String newPassword = DigestUtils.md5DigestAsHex(employeeEditPasswordDTO.getNewPassword().getBytes());
+        employee.setPassword(newPassword);
         employeeMapper.update(employee);
     }
 
