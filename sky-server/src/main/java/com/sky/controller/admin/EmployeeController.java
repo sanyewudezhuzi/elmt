@@ -72,7 +72,7 @@ public class EmployeeController {
      */
     @ApiOperation("员工退出")
     @PostMapping("/logout")
-    public Result<String> logout() {
+    public Result logout() {
         return Result.success();
     }
 
@@ -84,7 +84,7 @@ public class EmployeeController {
      */
     @ApiOperation("添加员工")
     @PostMapping
-    public Result<String> save(@RequestBody EmployeeDTO emp) {
+    public Result save(@RequestBody EmployeeDTO emp) {
         employeeService.save(emp);
         return Result.success();
     }
@@ -101,5 +101,20 @@ public class EmployeeController {
         log.info("Get name: {}, page: {}, pageSize: {}", employeePageQueryDTO.getName(), employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
         PageResult pageResult = employeeService.page(employeePageQueryDTO);
         return Result.success(pageResult);
+    }
+
+    /**
+     * 启用禁用员工
+     *
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("启用禁用员工")
+    public Result pickOrBan(@PathVariable Integer status, Long id) {
+        log.info("Get status: {}, id: {}", status, id);
+        employeeService.pickOrBan(status, id);
+        return Result.success();
     }
 }
