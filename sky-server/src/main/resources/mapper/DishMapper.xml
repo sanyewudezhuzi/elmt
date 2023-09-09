@@ -5,4 +5,60 @@
 
 <mapper namespace="com.sky.mapper.DishMapper">
 
+    <!--新增菜品-->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into dish
+        (name, category_id, price, image, description, status, create_time, update_time, create_user, update_user)
+            value
+            (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <!--菜品分页查询-->
+    <select id="pageQuery" resultType="com.sky.vo.DishVO">
+        select d.id,
+        d.name,
+        d.category_id,
+        d.price,
+        d.image,
+        d.description,
+        d.status,
+        d.update_time,
+        c.name as categoryName
+        from dish as d
+        join category as c
+        on d.category_id = c.id
+        <where>
+            <if test="name != null and name.length > 0">
+                and d.name like concat('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                and d.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and d.status = #{status}
+            </if>
+        </where>
+        order by d.create_time desc
+    </select>
+
+    <!--根据ids获取起售中菜品的个数-->
+    <select id="getCountOfEnableByIds" resultType="Integer">
+        select count(*)
+        from dish
+        where status = 1
+        and id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!--根据ids删除菜品-->
+    <delete id="deleteByIds">
+        delete from dish
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

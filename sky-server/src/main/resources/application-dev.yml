@@ -6,3 +6,8 @@ sky:
     database: elmt_db
     username: root
     password: abc123
+  alioss:
+    endpoint: oss-cn-guangzhou.aliyuncs.com
+    access-key-id: LTAI5tSRxTGHoqreAEMv7XTB
+    access-key-secret: RzUWjCVwa3Ll53Lm5WkIVSXT7H94dL
+    bucket-name: elmt-save-oos

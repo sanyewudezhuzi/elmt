@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sky.mapper.SetmealDishMapper">
+
+    <!--根据ids查询产生关联关系的菜品的个数-->
+    <select id="getCountOfBeRelated" resultType="Integer">
+        select count(*)
+        from dish
+        join setmeal_dish
+        on dish.id = setmeal_dish.dish_id
+        where dish.id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>
