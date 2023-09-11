@@ -14,12 +14,26 @@
     </insert>
 
     <!--根据菜品ids删除对应口味-->
-    <delete id="deleteByIds">
+    <delete id="deleteByDishIds">
         delete from dish_flavor
         where dish_id in
         <foreach collection="dishIds" item="dishId" separator="," open="(" close=")">
             #{dishId}
         </foreach>
+    </delete>
+
+    <!--根据菜品id获取对应口味-->
+    <select id="getDishFlavorByDishId" resultType="DishFlavor">
+        select id, dish_id, `name`, `value`
+        from dish_flavor
+        where dish_id = #{dishId}
+    </select>
+
+    <!--根据菜品id删除口味-->
+    <delete id="deleteByDishId">
+        delete
+        from dish_flavor
+        where dish_id = #{dishId}
     </delete>
 
 </mapper>

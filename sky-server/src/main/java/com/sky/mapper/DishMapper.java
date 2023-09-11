@@ -47,12 +47,28 @@ public interface DishMapper {
      * @return
      */
     Integer getCountOfEnableByIds(List<Long> ids);
-    
+
     /**
      * 根据ids删除菜品
      *
      * @param ids
      */
     void deleteByIds(List<Long> ids);
+
+    /**
+     * 根据id获取菜品
+     *
+     * @param id
+     * @return
+     */
+    DishVO getDishVOById(Long id);
+
+    /**
+     * 根据id修改菜品
+     *
+     * @param dish
+     */
+    @AutoFill(OperationType.UPDATE)
+    void updateById(Dish dish);
 
 }
