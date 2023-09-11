@@ -116,6 +116,7 @@ public class DishServiceImpl implements DishService {
      * @param dishVO
      */
     @Override
+    @Transactional
     public void update(DishVO dishVO) {
         // 修改菜品
         Dish dish = new Dish();
@@ -145,6 +146,20 @@ public class DishServiceImpl implements DishService {
     @Override
     public List<Dish> list(Long categoryId) {
         return dishMapper.list(categoryId);
+    }
+
+    /**
+     * 起售停售菜品
+     *
+     * @param status
+     * @param id
+     */
+    @Override
+    public void pickOrBan(Integer status, Long id) {
+        Dish dish = new Dish();
+        dish.setStatus(status);
+        dish.setId(id);
+        dishMapper.updateById(dish);
     }
 
 }

@@ -55,4 +55,12 @@ public interface DishService {
      */
     List<Dish> list(Long categoryId);
 
+    /**
+     * 起售停售菜品
+     *
+     * @param status
+     * @param id
+     */
+    void pickOrBan(Integer status, Long id);
+
 }

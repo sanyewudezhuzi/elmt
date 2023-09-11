@@ -108,4 +108,19 @@ public class DishController {
         return Result.success(dishs);
     }
 
+    /**
+     * 起售停售菜品
+     *
+     * @param status
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("起售停售菜品")
+    public Result pickOrBan(@PathVariable Integer status, @RequestParam Long id) {
+        log.info("Get status: {}, id: {}", status, id);
+        dishService.pickOrBan(status, id);
+        return Result.success();
+    }
+
 }
