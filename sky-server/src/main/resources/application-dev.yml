@@ -11,3 +11,8 @@ sky:
     access-key-id: LTAI5tSRxTGHoqreAEMv7XTB
     access-key-secret: RzUWjCVwa3Ll53Lm5WkIVSXT7H94dL
     bucket-name: elmt-save-oos
+  redis:
+    host: localhost
+    port: 6379
+    password: abc123
+    database: 0
