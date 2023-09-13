@@ -17,4 +17,29 @@
         </foreach>
     </select>
 
+    <!--保存套餐中的菜品-->
+    <insert id="save">
+        insert into setmeal_dish(setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="list" item="dish" separator=",">
+            (#{dish.setmealId}, #{dish.dishId}, #{dish.name}, #{dish.price}, #{dish.copies})
+        </foreach>
+    </insert>
+
+    <!--根据套餐ids删除对应的关联菜品-->
+    <delete id="deleteBySetmealIds">
+        delete from setmeal_dish
+        where setmeal_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据套餐id查询套餐中的菜品-->
+    <select id="getSetmealDishBySetmealId" resultType="com.sky.entity.SetmealDish">
+        select id, setmeal_id, dish_id, name, price, copies
+        from setmeal_dish
+        where setmeal_id = #{setmealId}
+    </select>
+
 </mapper>

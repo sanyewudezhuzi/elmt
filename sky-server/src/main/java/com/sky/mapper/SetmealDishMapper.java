@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.entity.SetmealDish;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,5 +15,27 @@ public interface SetmealDishMapper {
      * @return
      */
     Integer getCountOfBeRelated(List<Long> ids);
-    
+
+    /**
+     * 保存套餐中的菜品
+     *
+     * @param list
+     */
+    void save(List<SetmealDish> list);
+
+    /**
+     * 根据套餐ids删除对应的关联菜品
+     *
+     * @param ids
+     */
+    void deleteBySetmealIds(List<Long> ids);
+
+    /**
+     * 根据套餐id查询套餐中的菜品
+     *
+     * @param setmealId
+     * @return
+     */
+    List<SetmealDish> getSetmealDishBySetmealId(Long setmealId);
+
 }

@@ -33,9 +33,6 @@ public class DishServiceImpl implements DishService {
     private DishFlavorsMapper dishFlavorsMapper;
 
     @Autowired
-    private SetmealMapper setmealMapper;
-
-    @Autowired
     private SetmealDishMapper setmealDishMapper;
 
     /**

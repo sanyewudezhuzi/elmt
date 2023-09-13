@@ -112,7 +112,7 @@ public class DishController {
      * 起售停售菜品
      *
      * @param status
-     * @param ids
+     * @param id
      * @return
      */
     @PostMapping("/status/{status}")
