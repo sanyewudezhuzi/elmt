@@ -11,9 +11,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 @RestController("adminDishController")
 @RequestMapping("/admin/dish")
@@ -23,6 +26,19 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    /**
+     * 清除缓存数据
+     *
+     * @param pattern
+     */
+    private void cleanCache(String pattern) {
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
+    }
 
     /**
      * 新增菜品
@@ -35,6 +51,8 @@ public class DishController {
     public Result save(@RequestBody DishDTO dishDTO) {
         log.info("Get DishDTO: {}", dishDTO);
         dishService.save(dishDTO);
+        // 清理缓存
+        cleanCache("dish_" + dishDTO.getCategoryId());
         return Result.success();
     }
 
@@ -63,6 +81,8 @@ public class DishController {
     public Result delete(@RequestParam List<Long> ids) {
         log.info("Get ids: {}", ids);
         dishService.delete(ids);
+        // 将所有的菜品缓存数据清理掉，所有以dish_开头的key
+        cleanCache("dish_*");
         return Result.success();
     }
 
@@ -91,6 +111,8 @@ public class DishController {
     public Result update(@RequestBody DishVO dishVO) {
         log.info("Get DishVO: {}", dishVO);
         dishService.update(dishVO);
+        // 将所有的菜品缓存数据清理掉，所有以dish_开头的key
+        cleanCache("dish_*");
         return Result.success();
     }
 
@@ -120,6 +142,8 @@ public class DishController {
     public Result pickOrBan(@PathVariable Integer status, @RequestParam Long id) {
         log.info("Get status: {}, id: {}", status, id);
         dishService.pickOrBan(status, id);
+        // 将所有的菜品缓存数据清理掉，所有以dish_开头的key
+        cleanCache("dish_*");
         return Result.success();
     }
 
