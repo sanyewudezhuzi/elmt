@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sky.mapper.SetmealMapper">
+
+    <!--套餐分页查询-->
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select s.id,
+        s.category_id,
+        s.name,
+        s.price,
+        s.status,
+        s.description,
+        s.image,
+        s.update_time,
+        c.name as category_name
+        from setmeal as s
+        join category as c
+        on s.category_id = c.id
+        <where>
+            <if test="name != null">
+                s.name like concat('%', #{name}, '%')
+            </if>
+            <if test="categoryId != null">
+                and s.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and s.status = #{status}
+            </if>
+        </where>
+        order by update_time desc, id asc
+    </select>
+
+    <!--根据ids获取启用中的套餐个数-->
+    <select id="getCountOfEnableByIds" resultType="Integer">
+        select count(*)
+        from setmeal
+        where status = 1 and id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!--批量删除套餐-->
+    <delete id="deleteByIds">
+        delete
+        from setmeal
+        where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据id查询套餐-->
+    <select id="getSetmealById" resultType="com.sky.vo.SetmealVO">
+        select s.id,
+               s.category_id,
+               s.name,
+               s.price,
+               s.status,
+               s.description,
+               s.image,
+               s.update_time,
+               c.name as categoryName
+        from setmeal as s
+                 join category as c on s.category_id = c.id
+        where s.id = #{id}
+    </select>
+
+    <!--根据id修改套餐-->
+    <update id="updateById">
+        update setmeal
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="image != null">
+                image = #{image},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--根据套餐id获取套餐中处于停售状态的菜品个数-->
+    <select id="getCountOfEnableDishById" resultType="Integer">
+        select count(*)
+        from setmeal as s
+                 join setmeal_dish as sd
+                 join dish as d
+                      on s.id = sd.setmeal_id and sd.dish_id = d.id
+        where s.id = #{id}
+          and d.status = 0;
+    </select>
+
+</mapper>
