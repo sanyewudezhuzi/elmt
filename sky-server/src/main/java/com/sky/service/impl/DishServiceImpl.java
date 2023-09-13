@@ -159,4 +159,24 @@ public class DishServiceImpl implements DishService {
         dishMapper.updateById(dish);
     }
 
+    /**
+     * 根据分类id查询菜品，包括口味
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<DishVO> listPlus(Long categoryId) {
+        List<Dish> dishes = dishMapper.list(categoryId);
+        List<DishVO> list = dishes.stream().map((i) -> {
+            // 封装DishVO
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(i, dishVO);
+            // 根据菜品id查询菜品的口味
+            dishVO.setFlavors(dishFlavorsMapper.getDishFlavorByDishId(i.getId()));
+            return dishVO;
+        }).collect(Collectors.toList());
+        return list;
+    }
+
 }

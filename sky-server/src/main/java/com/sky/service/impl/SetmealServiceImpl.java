@@ -38,18 +38,6 @@ public class SetmealServiceImpl implements SetmealService {
     private SetmealDishMapper setmealDishMapper;
 
     /**
-     * 根据套餐id查询菜品列表
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    public List<DishItemVO> getDishListById(Long id) { // todo:移到下面
-        // todo: 先写套餐管理
-        return null;
-    }
-
-    /**
      * 新增套餐
      *
      * @param setmealDTO
@@ -144,6 +132,30 @@ public class SetmealServiceImpl implements SetmealService {
         setmeal.setId(id);
         setmeal.setStatus(status);
         setmealMapper.updateById(setmeal);
+    }
+
+    /**
+     * 根据套餐id查询菜品列表
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public List<DishItemVO> getDishListById(Long id) {
+        List<DishItemVO> list = setmealDishMapper.getDishsById(id);
+        return list;
+    }
+
+    /**
+     * 根据分类id查询套餐
+     *
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Setmeal> list(Long categoryId) {
+        List<Setmeal> list = setmealMapper.getSetmealsByCategoryId(categoryId);
+        return list;
     }
 
 }

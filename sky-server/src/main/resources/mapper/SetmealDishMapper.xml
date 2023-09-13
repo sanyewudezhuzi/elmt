@@ -42,4 +42,12 @@
         where setmeal_id = #{setmealId}
     </select>
 
+    <!--根据套餐id查询菜品列表-->
+    <select id="getDishsById" resultType="com.sky.vo.DishItemVO">
+        select sd.name, sd.copies, d.image, d.description
+        from setmeal_dish as sd
+                 join dish as d on sd.dish_id = d.id
+        where sd.setmeal_id = #{id};
+    </select>
+
 </mapper>

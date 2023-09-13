@@ -48,7 +48,7 @@ public interface DishService {
     void update(DishVO dishVO);
 
     /**
-     * 根据分类id查询菜品
+     * 根据分类id查询菜品，不包括口味
      *
      * @param categoryId
      * @return
@@ -62,5 +62,13 @@ public interface DishService {
      * @param id
      */
     void pickOrBan(Integer status, Long id);
+
+    /**
+     * 根据分类id查询菜品，包括口味
+     *
+     * @param categoryId
+     * @return
+     */
+    List<DishVO> listPlus(Long categoryId);
 
 }
