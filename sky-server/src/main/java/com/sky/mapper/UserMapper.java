@@ -37,7 +37,7 @@ public interface UserMapper {
      * @return
      */
     @Select("select id, openid, name, phone, sex, id_number, avatar, create_time " +
-            "from user" +
+            "from user " +
             "where id = #{id}")
     User getById(Long id);
 

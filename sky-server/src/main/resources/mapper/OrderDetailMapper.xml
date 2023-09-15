@@ -6,7 +6,7 @@
 <mapper namespace="com.sky.mapper.OrderDetailMapper">
 
     <!--保存明细表-->
-    <insert id="insertBatch">
+    <insert id="saveList">
         insert into order_detail
         (name, order_id, dish_id, setmeal_id, dish_flavor, number, amount, image)
         values
