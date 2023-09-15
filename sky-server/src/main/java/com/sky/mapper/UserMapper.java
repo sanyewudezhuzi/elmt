@@ -30,4 +30,15 @@ public interface UserMapper {
             "values(#{openid}, #{createTime})")
     void save(User user);
 
+    /**
+     * 根据id获得用户
+     *
+     * @param id
+     * @return
+     */
+    @Select("select id, openid, name, phone, sex, id_number, avatar, create_time " +
+            "from user" +
+            "where id = #{id}")
+    User getById(Long id);
+
 }

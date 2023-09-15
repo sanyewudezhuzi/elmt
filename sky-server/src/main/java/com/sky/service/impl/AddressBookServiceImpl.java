@@ -1,13 +1,13 @@
 package com.sky.service.impl;
 
 import com.sky.context.BaseContext;
-import com.sky.controller.user.AddressBookController;
 import com.sky.dto.AddressBoodDTO;
 import com.sky.entity.AddressBook;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -79,6 +79,7 @@ public class AddressBookServiceImpl implements AddressBookService {
      * @param addressBoodDTO
      */
     @Override
+    @Transactional
     public void updateDefaultAddressById(AddressBoodDTO addressBoodDTO) {
         addressBookMapper.updateDefaultAddressByUserId(addressBoodDTO.getUserId());
         addressBookMapper.updateDefaultAddressById(addressBoodDTO.getId());
