@@ -9,6 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Mapper
 public interface OrderMapper {
 
@@ -72,5 +75,14 @@ public interface OrderMapper {
      * @param ordersRejectionDTO
      */
     void rejection(OrdersRejectionDTO ordersRejectionDTO);
+
+    /**
+     * 根据状态和下单时间查询订单
+     *
+     * @param status
+     * @param ldt
+     * @return
+     */
+    List<Orders> getByStatusAndOrdertimeLT(Integer status, LocalDateTime ldt);
 
 }
