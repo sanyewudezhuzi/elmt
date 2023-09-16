@@ -63,4 +63,11 @@ public interface ShoppingCartMapper {
      */
     void sub(ShoppingCartDTO shoppingCartDTO);
 
+    /**
+     * 批量保存购物车
+     *
+     * @param shoppingCarts
+     */
+    void saveList(List<ShoppingCart> shoppingCarts);
+
 }

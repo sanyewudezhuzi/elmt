@@ -42,4 +42,13 @@
         </where>
     </delete>
 
+    <!--批量保存购物车-->
+    <insert id="saveList">
+        insert into shopping_cart(name, user_id, dish_id, setmeal_id, dish_flavor, number, amount, image, create_time)
+        values
+        <foreach collection="shoppingCarts" item="sc" separator=",">
+            (#{sc.name},#{sc.userId},#{sc.dishId},#{sc.setmealId},#{sc.dishFlavor},#{sc.number},#{sc.amount},#{sc.image},#{sc.createTime})
+        </foreach>
+    </insert>
+
 </mapper>

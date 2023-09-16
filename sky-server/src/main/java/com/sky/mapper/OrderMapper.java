@@ -1,8 +1,13 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersConfirmDTO;
+import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface OrderMapper {
@@ -28,5 +33,44 @@ public interface OrderMapper {
      * @param orders
      */
     void update(Orders orders);
+
+    /**
+     * 查询历史订单
+     *
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page historyOrders(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 根据id查询订单
+     *
+     * @param orderId
+     * @return
+     */
+    Orders getOrderById(Long orderId);
+
+    /**
+     * 按状态获取个数
+     *
+     * @param status
+     * @return
+     */
+    Integer getCountGroupByStatus(Integer status);
+
+    /**
+     * 更改订单状态
+     *
+     * @param ordersConfirmDTO
+     */
+    @Update("update order set status = #{status} where id = #{orderId}")
+    void updateStatus(OrdersConfirmDTO ordersConfirmDTO);
+
+    /**
+     * 拒单
+     *
+     * @param ordersRejectionDTO
+     */
+    void rejection(OrdersRejectionDTO ordersRejectionDTO);
 
 }
