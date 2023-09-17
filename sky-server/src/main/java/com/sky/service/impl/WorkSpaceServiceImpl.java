@@ -46,11 +46,13 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
         map.put("end", end);
 
         // 营业额：当日已完成订单的总金额
+        map.put("status", Orders.COMPLETED);
         Double turnover = reportMapper.sumByMap(map);
+        turnover = turnover == null ? 0.0 : turnover;
 
         // 有效订单：当日已完成订单的数量
-        map.put("status", Orders.COMPLETED);
         Integer validOrderCount = reportMapper.getOrderCount(map);
+        validOrderCount = validOrderCount == null ? 0 : validOrderCount;
 
         // 订单完成率：有效订单数 / 总订单数
         map.put("status", null);

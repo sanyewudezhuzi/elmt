@@ -1,19 +1,25 @@
 package com.sky.service.impl;
 
-import com.sky.dto.DataOverViewQueryDTO;
 import com.sky.dto.GoodsSalesDTO;
 import com.sky.entity.Orders;
 import com.sky.mapper.ReportMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.service.WorkSpaceService;
+import com.sky.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -29,6 +35,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private WorkSpaceService workSpaceService;
 
     /**
      * 营业额统计接口
@@ -195,5 +204,57 @@ public class ReportServiceImpl implements ReportService {
                 .build();
     }
 
+    /**
+     * 导出Excel报表接口
+     *
+     * @param response
+     */
+    @Override
+    public void export(HttpServletResponse response) throws Exception {
+        // 获取数据
+        LocalDateTime begin = LocalDateTime.of(LocalDate.now().plusDays(-30), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(LocalDate.now().plusDays(-1), LocalTime.MAX);
+        BusinessDataVO data = workSpaceService.businessData(begin, end);
+
+        // 获取文件
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("./template/运营数据报表模板.xlsx");
+        // 基于提供好的模板文件创建一个新的Excel表格对象
+        XSSFWorkbook excel = new XSSFWorkbook(is);
+        // 获得Excel文件中的一个sheet页
+        XSSFSheet sheet = excel.getSheet("Sheet1");
+        // 写入第二行第二列的单元格
+        sheet.getRow(1).getCell(1).setCellValue(begin.toLocalDate() + "至" + end.toLocalDate());
+        // 获得第四行
+        XSSFRow row = sheet.getRow(3);
+        // 获取单元格
+        row.getCell(2).setCellValue(data.getTurnover());
+        row.getCell(4).setCellValue(data.getOrderCompletionRate());
+        row.getCell(6).setCellValue(data.getNewUsers());
+        // 获得第五行
+        row = sheet.getRow(4);
+        // 获取单元格
+        row.getCell(2).setCellValue(data.getValidOrderCount());
+        row.getCell(4).setCellValue(data.getUnitPrice());
+
+        for (int i = 0; i < 30; i++) {
+            // 准备明细数据
+            data = workSpaceService.businessData(begin.plusDays(i), end.plusDays(i - 29));
+            row = sheet.getRow(7 + i);
+            log.info("row: {}", row);
+            log.info("row.getCell(1): {}", row.getCell(1));
+            row.getCell(1).setCellValue(LocalDate.from(begin.plusDays(i)).toString());
+            row.getCell(2).setCellValue(data.getTurnover());
+            row.getCell(3).setCellValue(data.getValidOrderCount());
+            row.getCell(4).setCellValue(data.getOrderCompletionRate());
+            row.getCell(5).setCellValue(data.getUnitPrice());
+            row.getCell(6).setCellValue(data.getNewUsers());
+        }
+        // 通过输出流将文件下载到客户端浏览器中
+        ServletOutputStream out = response.getOutputStream();
+        excel.write(out);
+        // 关闭资源
+        out.close();
+        excel.close();
+    }
 
 }
