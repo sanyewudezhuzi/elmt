@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sky.mapper.ReportMapper">
+
+    <!--根据动态条件统计营业额-->
+    <select id="sumByMap" resultType="Double">
+        select sum(amount)
+        from orders
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt;= #{end}
+            </if>
+        </where>
+    </select>
+
+    <!--获取用户数量-->
+    <select id="getUserCount" resultType="Integer">
+        select count(*)
+        from user
+        <where>
+            <if test="begin != null">
+                create_time >= #{begin}
+            </if>
+            <if test="end != null">
+                and create_time &lt;= #{end}
+            </if>
+        </where>
+    </select>
+
+    <!--根据动态条件统计订单数量-->
+    <select id="getOrderCount" resultType="Integer">
+        select count(*) from orders
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="begin != null">
+                and order_time &gt;= #{begin}
+            </if>
+            <if test="end != null">
+                and order_time &lt;= #{end}
+            </if>
+        </where>
+    </select>
+
+    <!--获取指定时间销量前十的商品-->
+    <select id="getSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        select od.name as name, sum(od.number) as number
+        from orders as o join order_detail as od
+        on o.id = od.order_id
+        where o.status = 5
+        <if test="beginTime != null">
+            and order_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and order_time &lt;= #{endTime}
+        </if>
+        group by name
+        order by number desc
+        limit 0, 10;
+    </select>
+
+</mapper>
