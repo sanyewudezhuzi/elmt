@@ -7,26 +7,26 @@ sky:
     username: root
     password: abc123
   alioss:
-    endpoint: oss-cn-guangzhou.aliyuncs.com
-    access-key-id: LTAI5tSRxTGHoqreAEMv7XTB
-    access-key-secret: RzUWjCVwa3Ll53Lm5WkIVSXT7H94dL
-    bucket-name: elmt-save-oos
+    endpoint: ???
+    access-key-id: ???
+    access-key-secret: ???
+    bucket-name: ???
   redis:
     host: localhost
     port: 6379
     password: abc123
     database: 0
   wechat:
-    appid: wx5b5b4cbc58f60878
-    secret: 3bafa068d0727076bd393e319a34b1e1
-    mchid: 1561414331
-    mchSerialNo: 4B3B3DC35414AD50B1B755BAF8DE9CC7CF407606
-    privateKeyFilePath: F:\JavaEE212\Preview\Project\elmt\document\apiclient_key.pem
-    apiV3Key: CZBK51236435wxpay435434323FFDuv3
-    weChatPayCertFilePath: F:\JavaEE212\Preview\Project\elmt\document\wechatpay_166D96F876F45C7D07CE98952A96EC980368ACFC.pem
-    notifyUrl: https://www.weixin.qq.com/wxpay/pay.php
-    refundNotifyUrl: https://www.weixin.qq.com/wxpay/pay.php
+    appid: ???
+    secret: ???
+    mchid: ???
+    mchSerialNo: ???
+    privateKeyFilePath: ???
+    apiV3Key: ???
+    weChatPayCertFilePath: ???
+    notifyUrl: ???
+    refundNotifyUrl: ???
   shop:
-    address: 广州市天河区天河客运站
+    address: ???
   baidu:
-    ak: lZtDbPECEXlPFk5dcw6nTcLyydotQ7Ek
+    ak: ???
